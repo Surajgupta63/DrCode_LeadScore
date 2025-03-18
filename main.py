@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import bcrypt
 from flask_mail import Mail, Message
+from chatbot import get_openai_response
 
 app = Flask(__name__)
 
@@ -179,8 +180,17 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
+    if request.method == 'POST':
+        query = request.form['query']
+        try:
+            response = get_openai_response(question=query)
+            print("AI ka Response: ", response)
+        except Exception as e:
+            print(f"Error fetching query is: {str(e)}")
+
+
     if session['email']:
         user = User.query.filter_by(email = session['email']).first()
     
