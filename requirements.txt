@@ -1,0 +1,7 @@
+openai
+flask
+python-dotenv
+SQLAlchemy
+flask_sqlalchemy
+bcrypt
+flask-mail
