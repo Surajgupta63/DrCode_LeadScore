@@ -15,6 +15,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///default.db'  # Default DB
 app.config['SQLALCHEMY_BINDS'] = {
     'db1': 'sqlite:///user.db',
     'db2': 'sqlite:///leads.db'
+
+    
 }
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
