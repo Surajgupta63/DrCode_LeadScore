@@ -184,8 +184,11 @@ def dashboard():
     if session['email']:
         user = User.query.filter_by(email = session['email']).first()
     
-        all_leads = User.query.all()  
-        return render_template('dashboard.html', all_leads=all_leads, user=user)
+        all_leads = User.query.all() 
+        count = 0 
+        for lead in all_leads:
+            count += 1
+        return render_template('dashboard.html', all_leads=all_leads, user=user, count = count)
     return redirect('/login')
 
 if __name__ == '__main__':

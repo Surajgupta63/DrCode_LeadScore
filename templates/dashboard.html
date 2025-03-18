@@ -136,35 +136,8 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="table-responsive">
-            <table class="table table-bordered" border="2px">
-                <thead>
-                    <tr>
-                        <th>SNo</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Lead Score</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for visitor in all_leads %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ visitor.name }}</td>
-                        <td>{{ visitor.email }}</td>
-                        <td>{{ visitor.lead_score }}</td>
-                        <td>{{ visitor.status }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
     <!-- Main Dash board -->
-    <!-- <div class="dashboard">
+    <div class="dashboard">
         <div class="sidebar">
             <h2>Lead Dashboard</h2>
             <div class="menu">
@@ -180,14 +153,15 @@
                 </div>
                 <div class="user-info">
                     <span>Welcome, <strong>{{ user.email }}</strong></span>
-                    <button class="logout-btn">Logout</button>
+                    <a href="/login" class="logout-btn">Logout</a>
+                    <!-- <button class="logout-btn">Logout</button> -->
                 </div>
             </div>
             <h2>Dashboard</h2>
             <div class="stats">
                 <div class="stat-box">
                     <h3>Total Leads</h3>
-                    <p id="total-leads">120</p>
+                    <p id="total-leads"> {{ count }} </p>
                 </div>
                 <div class="stat-box" style="background: linear-gradient(135deg, #a1c4fd, #c2e9fb);">
                     <h3>Conversion Rate</h3>
@@ -201,12 +175,39 @@
             <div class="recent-leads">
                 <h3>Recent Leads</h3>
                 <ul class="lead-list" id="lead-list">
-                    <li>John Doe - john@example.com</li>
+                    <!-- <li>John Doe - john@example.com</li>
                     <li>Jane Smith - jane@example.com</li>
-                    <li>Mike Johnson - mike@example.com</li>
+                    <li>Mike Johnson - mike@example.com</li> -->
+                    <div class="container">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" border="2px">
+                                <thead>
+                                    <tr>
+                                        <th>SNo</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Lead Score</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for visitor in all_leads %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ visitor.name }}</td>
+                                        <td>{{ visitor.email }}</td>
+                                        <td>{{ visitor.lead_score }}</td>
+                                        <td>{{ visitor.status }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </ul>
+                
             </div>
         </div>
-    </div> -->
+    </div>
 </body>
 </html>
