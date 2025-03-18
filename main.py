@@ -9,14 +9,54 @@ from flask_mail import Mail, Message
 
 app = Flask(__name__)
 
+## Mail Setup
+app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
+app.config['MAIL_PORT'] = 587  # SMTP port (587 for TLS, 465 for SSL)
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'dr.code63@gmail.com'
+app.config['MAIL_PASSWORD'] = 'ergx aiju rgat xfii'  # App Password hai
+
+mail = Mail(app)
+
+def send_email(recipient, name, status):
+    subject = "Bhai ab kuch kharid bhi le yrr!!"
+    body = f"Hello {name},\n\n Tumhara status {status} hai! Our team will contact you soon.\n\nBest Regards,\nDrCode"
+    
+    msg = Message(subject, sender="dr.code63@gmail.com", recipients=[recipient])
+    msg.body = body
+
+    try:
+        mail.send(msg)
+        print(f"Email sent to {recipient}")
+    except Exception as e:
+        print(f"Error sending email: {str(e)}")
+
+
+def check_lead_score(email, new_score):
+    # Fetch the lead from DB
+    lead = User.query.filter_by(email=email).first()
+
+    if lead:
+        # Check karo lead score crosses the threshold
+        if new_score >= 0 and new_score < 30:
+            send_email(lead.email, lead.name, 'cold')
+        elif new_score >= 30 and new_score < 70:
+            send_email(lead.email, lead.name, 'warm')
+        else:
+            send_email(lead.email, lead.name, 'hot')
+
+        return f"Lead score updated to {new_score} for {lead.name}"
+    
+    return "Lead not found"
+
+
 
 ## Database Setup
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///default.db'  # Default DB
 app.config['SQLALCHEMY_BINDS'] = {
     'db1': 'sqlite:///user.db',
     'db2': 'sqlite:///leads.db'
-
-    
 }
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -102,7 +142,7 @@ def signup():
             return redirect('/login')
 
         except:
-            db.session.rollback()  # Rollback changes to avoid breaking the session
+            db.session.rollback()  # Rollback kar do to avoid breaking the session
             print("Error: bhai this email is already registered.")
             return render_template('signup.html', error='Already hai try new one')
 
@@ -130,6 +170,7 @@ def login():
                 user.status = 'hot'
             
             db.session.commit()
+            check_lead_score(user.email, user.lead_score)
             session['email']    = user.email
             return redirect('/dashboard')
         else:
